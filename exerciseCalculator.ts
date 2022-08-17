@@ -8,6 +8,20 @@ interface ExerciseInfo {
   average: number;
 }
 
+const parseExerciseArguments = (args: Array<string>) => {
+  const finalArray = [];
+
+  for (let i = 2; i < args.length; i++) {
+    if (!isNaN(Number(args[i]))) {
+      finalArray.push(Number(args[i]));
+    } else {
+      throw new Error("Input provided were not numbers");
+    }
+  }
+
+  return { finalArray };
+};
+
 const calculateExercises = (param: Array<number>): ExerciseInfo => {
   const periodLength = param.length;
   const trainingDays = param.filter((a) => a > 0).length;
@@ -16,19 +30,7 @@ const calculateExercises = (param: Array<number>): ExerciseInfo => {
     totalHours += param[i];
   }
   const average = totalHours / periodLength;
-  // var rating
-  // if(average > 2){
-  //     rating = 3
-  // }
-  // else if(average < 2 && average > 1){
-  //     rating = 2
-  // }
-  // else {
-  //     rating = 1
-  // }
-  // const rating = 3 ? average > 2 : 2 ? average < 2 && average > 1 : 1;
   const rating = average > 2 ? 3 : average < 2 && average > 1 ? 2 : 1;
-  console.log(`rating here is ${rating}`);
   const target = 2;
   const success = true ? average >= 2 : false;
   const ratingDescription =
@@ -50,4 +52,13 @@ const calculateExercises = (param: Array<number>): ExerciseInfo => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1]));
+try {
+  const { finalArray } = parseExerciseArguments(process.argv);
+  console.log(calculateExercises(finalArray));
+} catch (error) {
+  let errorMsg = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMsg += "Error: " + error.message;
+  }
+  console.log(errorMsg);
+}
