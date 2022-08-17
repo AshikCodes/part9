@@ -15,17 +15,17 @@ const parseExerciseArguments = (args: Array<string>) => {
     if (!isNaN(Number(args[i]))) {
       finalArray.push(Number(args[i]));
     } else {
-      throw new Error("Input provided were not numbers");
+      throw new Error('Input provided were not numbers');
     }
   }
 
-  return { finalArray };
+  return {finalArray};
 };
 
 const calculateExercises = (param: Array<number>): ExerciseInfo => {
   const periodLength = param.length;
   const trainingDays = param.filter((a) => a > 0).length;
-  var totalHours = 0;
+  let totalHours = 0;
   for (let i = 0; i < periodLength; i++) {
     totalHours += param[i];
   }
@@ -34,13 +34,13 @@ const calculateExercises = (param: Array<number>): ExerciseInfo => {
   const target = 2;
   const success = true ? average >= 2 : false;
   const ratingDescription =
-    rating == 3
-      ? "Hours met"
-      : rating == 2
-      ? "not too bad but could be better"
-      : rating == 1
-      ? "Hours not met"
-      : "Error";
+    rating == 3 ?
+      'Hours met' :
+      rating == 2 ?
+      'not too bad but could be better' :
+      rating == 1 ?
+      'Hours not met' :
+      'Error';
   return {
     periodLength,
     trainingDays,
@@ -53,12 +53,12 @@ const calculateExercises = (param: Array<number>): ExerciseInfo => {
 };
 
 try {
-  const { finalArray } = parseExerciseArguments(process.argv);
+  const {finalArray} = parseExerciseArguments(process.argv);
   console.log(calculateExercises(finalArray));
 } catch (error) {
-  let errorMsg = "Something bad happened.";
+  let errorMsg = 'Something bad happened.';
   if (error instanceof Error) {
-    errorMsg += "Error: " + error.message;
+    errorMsg += 'Error: ' + error.message;
   }
   console.log(errorMsg);
 }
