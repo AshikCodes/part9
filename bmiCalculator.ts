@@ -50,3 +50,5 @@ try {
   }
   console.log(errorMsg);
 }
+
+export { calculateBmi };
