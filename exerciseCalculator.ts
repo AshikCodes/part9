@@ -8,38 +8,43 @@ interface ExerciseInfo {
   average: number;
 }
 
-const parseExerciseArguments = (args: Array<string>) => {
+const parseExerciseArguments = (exerciseArray: Array<string>) => {
   const finalArray = [];
 
-  for (let i = 2; i < args.length; i++) {
-    if (!isNaN(Number(args[i]))) {
-      finalArray.push(Number(args[i]));
+  if(exerciseArray === null || exerciseArray.length === 0){
+    throw new Error('parameters missing');
+  }
+
+  for (let i = 2; i < exerciseArray.length; i++) {
+    if (!isNaN(Number(exerciseArray[i]))) {
+      finalArray.push(Number(exerciseArray[i]));
     } else {
-      throw new Error('Input provided were not numbers');
+      throw new Error('malformatted parameters');
     }
   }
 
   return {finalArray};
 };
 
-const calculateExercises = (param: Array<number>): ExerciseInfo => {
-  const periodLength = param.length;
-  const trainingDays = param.filter((a) => a > 0).length;
+const calculateExercises = (exerciseArray: Array<number>, targetNum: number): ExerciseInfo => {
+  const periodLength = exerciseArray.length;
+  const trainingDays = exerciseArray.filter((a) => a > 0).length;
   let totalHours = 0;
   for (let i = 0; i < periodLength; i++) {
-    totalHours += param[i];
+    totalHours += exerciseArray[i];
   }
   const average = totalHours / periodLength;
-  const rating = average > 2 ? 3 : average < 2 && average > 1 ? 2 : 1;
-  const target = 2;
-  const success = true ? average >= 2 : false;
+  const target = targetNum;
+  const rating = average > target ? 3 : average == target ? 2 : 1;
+  // eslint-disable-next-line no-constant-condition
+  const success = true ? average >= target : false;
   const ratingDescription =
     rating == 3 ?
-      'Hours met' :
+      'good' :
       rating == 2 ?
       'not too bad but could be better' :
       rating == 1 ?
-      'Hours not met' :
+      'bad' :
       'Error';
   return {
     periodLength,
@@ -52,13 +57,15 @@ const calculateExercises = (param: Array<number>): ExerciseInfo => {
   };
 };
 
-try {
-  const {finalArray} = parseExerciseArguments(process.argv);
-  console.log(calculateExercises(finalArray));
-} catch (error) {
-  let errorMsg = 'Something bad happened.';
-  if (error instanceof Error) {
-    errorMsg += 'Error: ' + error.message;
-  }
-  console.log(errorMsg);
-}
+// try {
+//   const {finalArray} = parseExerciseArguments(process.argv);
+//   console.log(calculateExercises(finalArray,2));
+// } catch (error) {
+//   let errorMsg = 'Something bad happened.';
+//   if (error instanceof Error) {
+//     errorMsg += 'Error: ' + error.message;
+//   }
+//   console.log(errorMsg);
+// }
+
+export {calculateExercises,parseExerciseArguments};
